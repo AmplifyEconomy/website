@@ -1,5 +1,54 @@
 import { FC } from 'react';
-import { IndexMiningContainer } from './styles/Index.mining.styles';
+import styled from 'styled-components';
+
+export const IndexMiningContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 0 120px 0;
+
+  div.wrap {
+    width: 100%;
+    max-width: 768px;
+    min-height: 180px;
+    border-bottom: 2px dashed black;
+    padding: 45px 15px;
+
+    &:last-of-type { border-bottom: none; }
+
+    h2 {
+      font-weight: 300;
+      font-size: 24px;
+      padding: 0 0 30px 0;
+    }
+
+    p {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+  }
+
+  @media (max-width: 640px) {
+    div.wrap {
+      width: auto;
+      padding: 45px 30px;
+
+      line-height: 1.5;
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+  }
+`;
 
 export const IndexMining:FC = () => {
   return (
