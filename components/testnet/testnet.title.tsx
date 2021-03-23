@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-export const RoadmapTitleContainer = styled.div`
+export const TestnetTitleContainer = styled.div`
     background: hsla(200, 100%, 84%, 1);
     background: linear-gradient(315deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
 
@@ -17,8 +17,7 @@ export const RoadmapTitleContainer = styled.div`
     }
 
     img.logo {
-        filter: blur(1px);
-        height: 128px;
+        height: 92px;
         margin: 0 30px 0 0;
     }
 
@@ -40,10 +39,10 @@ export const RoadmapTitleContainer = styled.div`
         div.wrap {
             width: 100%;
             flex-direction: column;
-            padding: 0 0 60px;
+            padding: 0 0 60px 0;
     
             img.logo {
-                height: 92px;
+                height: 64px;
                 margin: 15px;
             }
     
@@ -65,16 +64,16 @@ export const RoadmapTitleContainer = styled.div`
     }
 `;
 
-export const RoadmapTitle: FC = () => {
+export const TestnetTitle: FC = () => {
     return(
-        <RoadmapTitleContainer>
+        <TestnetTitleContainer>
             <div className="wrap">
-                <img src="/image/amplify.white.png" className="logo" />
+                <img src="/image/arweave.white.png" className="logo" />
                 <div className="text">
-                    <h1>Amplify</h1>
-                    <h2>Roadmap and Project Goals</h2>
+                    <h1>Testnet</h1>
+                    <h2>For Arweave using Testweave</h2>
                 </div>
             </div>
-        </RoadmapTitleContainer>
+        </TestnetTitleContainer>
     )
 }

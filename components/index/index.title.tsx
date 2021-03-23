@@ -3,54 +3,54 @@ import styled from 'styled-components';
 
 export const IndexTitleContainer = styled.div`
   position: relative;
+  width: 100%;
+  min-height: 640px;
+  height: 80vh;
+
+  background: hsla(200, 100%, 84%, 1);
+  background: linear-gradient(315deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
+  
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
 
-  div.title-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 768px;
-    min-height: 240px;
-    border-bottom: 2px dashed black;
+  img {
+    height: 128px;
+    filter: blur(1px);
+    margin: 15px 0 0 0;
+  }
 
-    img.logo {
-      filter: blur(1px);
-      height: 128px;
-      margin: 0 30px 0 0;
+  div.text {
+    padding: 15px 60px;
+
+    h2 {
+      font-size: 64px;
+      font-weight: 300;
+      padding: 0 0 15px 0;
     }
-
-    div.text {
-      h1 {
-        font-size: 32px;
-        font-weight: 400;
-        padding: 0 0 15px 0;
-      }
-
-      h2 {
-        font-size: 18px;
-      }
+    p {
+      font-size: 24px;
     }
   }
 
   @media (max-width: 640px) {
-    div.title-text {
-      flex-direction: column;
-      padding: 0 0 90px 0;
+    flex-direction: column;
 
-      img.logo {
-        height: 92px;
-        margin: 15px;
+    img {
+      height: 96px;
+    }
+
+    div.text {
+      text-align: center;
+    
+      h2 {
+        font-size: 32px;
       }
 
-      div.text {
-        width: 100%;
-        h1, h2 {
-          text-align: center;
-        }
+      p {
+        font-size: 18px;
+        line-height: 1.5;
       }
     }
   }
@@ -59,12 +59,10 @@ export const IndexTitleContainer = styled.div`
 export const IndexTitle:FC = () => {
   return (
     <IndexTitleContainer>
-      <div className="title-text">
-        <img src="/image/amplify.png" className="logo" />
-        <div className="text">
-          <h1>Amplify</h1>
-          <h2>The Distributed Economy For Bandwidth</h2>
-        </div>
+      <img src="/image/amplify.white.png"/>
+      <div className="text">
+        <h2>Amplify</h2>
+        <p>The Distributed Economy for Bandwidth</p>
       </div>
     </IndexTitleContainer>
   )
