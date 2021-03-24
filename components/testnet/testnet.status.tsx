@@ -1,6 +1,11 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { GoAlert } from 'react-icons/go';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { IoMdCheckmarkCircle } from 'react-icons/io';
+import { get } from 'superagent';
+
+export const URL = `https://testnet.amplify.host`;
 
 export const TestnetStatusContainer = styled.div`
     width: 100%;
@@ -21,8 +26,19 @@ export const TestnetStatusContainer = styled.div`
         display: flex;
         align-items: center;
         width: calc(100% - 320px);
-        color: #C53232;
         font-size: 32px;
+
+        &.error {
+            color: #C53232;
+        }
+
+        &.loading {
+            color: #C4C4C4;
+        }
+
+        &.online {
+            color: #47D249;
+        }
 
         p {
             padding: 0 15px;
@@ -51,13 +67,53 @@ export const TestnetStatusContainer = styled.div`
 `;
 
 export const TestnetStatus: FC = () => {
+    const [status, setStatus] = useState('Loading');
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const payload = await get(URL);
+                setStatus('Online');
+            } catch (error) {
+                setStatus('Error');
+            }
+            
+            
+        })();
+    }, []);
+
     return(
         <TestnetStatusContainer>
             <h2>Network Status</h2>
-            <div className="status">
-                <GoAlert/>
-                <p>Unavailable</p>
-            </div>
+            {
+                status === 'Loading' ?
+                (
+                    <div className="status loading">
+                        <AiOutlineLoading3Quarters className="rotate"/>
+                        <p>Loading</p>
+                    </div>
+                ) : ''
+            }
+
+            {
+                status === 'Error' ?
+                (
+                    <div className="status error">
+                        <GoAlert/>
+                        <p>Unavailable</p>
+                    </div>
+                ) : ''
+            }
+
+            {
+                status === 'Online' ?
+                (
+                    <div className="status online">
+                        <IoMdCheckmarkCircle/>
+                        <p>Online</p>
+                    </div>
+                ) : ''
+            }
         </TestnetStatusContainer>
     )
 }

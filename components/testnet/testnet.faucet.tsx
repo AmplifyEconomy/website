@@ -1,5 +1,8 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
+import { post } from 'superagent';
+
+export const URL = `https://testnet.amplify.host/dispense`;
 
 export const TestnetFaucetContainer = styled.div`
     width: 100%;
@@ -19,6 +22,7 @@ export const TestnetFaucetContainer = styled.div`
     }
 
     input {
+        font-family: monospace;
         width: calc(100% - 45px);
         height: 50px;
         border-radius: 8px;
@@ -31,8 +35,27 @@ export const TestnetFaucetContainer = styled.div`
 
     div.button-wrap {
         display: flex;
+        align-items: center;
         justify-content: flex-end;
         padding: 15px;
+
+        div.status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 15px;
+            background: #C4C4C4;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            width: 240px;
+            height: 50px;
+            border-radius: 8px;
+
+            &.green {
+                background: #47D249;
+            }
+        }
 
         a.button {
             display: flex;
@@ -74,16 +97,64 @@ export const TestnetFaucetContainer = styled.div`
 `;
 
 export const TestnetFaucet: FC = () => {
+    const [address, setAddress] = useState('');
+    const [dispense, setDispense] = useState('idle');
+
     return(
         <TestnetFaucetContainer>
             <h2>Network Faucet</h2>
             <p>
                 Arweave Address
             </p>
-            <input type="text" placeholder="Address"/>
+            <input
+                type="text"
+                placeholder="Address"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+            />
 
             <div className="button-wrap">
-                <a className="button">
+
+                {
+                    dispense === 'loading' ?
+                    (
+                        <div className="status gray">
+                            Dispensing...
+                        </div>
+                    )
+                    : ''
+                }
+                {
+                    dispense === 'error' ?
+                    (
+                        <div className="status gray">
+                            There was an error...
+                        </div>
+                    )
+                    : ''
+                }
+                {
+                    dispense === 'success' ?
+                    (
+                        <div className="status green">
+                            Success!
+                        </div>
+                    )
+                    : ''
+                }
+                <a
+                    className="button"
+                    onClick={async e => {
+                        try {
+                            setDispense('loading');
+                            await post(URL).send({ address })
+                            setDispense('success');
+                        } catch (error) {
+                            setDispense('error');
+                        }
+                        
+                    }}
+                >
                     Dispense 1 AR
                 </a>
             </div>
