@@ -5,19 +5,20 @@ import { AiOutlineHome } from 'react-icons/ai';
 import { FaMapSigns } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
 import { FiGithub } from 'react-icons/fi';
+import { GiMagicGate } from 'react-icons/gi';
 
 export const HeaderContainer = styled.header`
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
-    height: 50px;
+    height: 40px;
     z-index: 1111;
 
     background: hsla(200, 100%, 84%, 1);
     background: linear-gradient(90deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
 
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid white;
     color: white;
     font-family: 'Work Sans', Arial;
 
@@ -42,12 +43,13 @@ export const HeaderContainer = styled.header`
             padding: 0 15px;
 
             img {
-                height: 42px;
-                margin: 0 15px 0 0;
+                height: 32px;
+                margin: 0 10px 0 0;
             }
 
             h1 {
-                font-size: 24px;
+                font-size: 22px;
+                padding: 0 0 2.5px 0;
             }
 
             transition: background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
@@ -62,9 +64,9 @@ export const HeaderContainer = styled.header`
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 150px;
+                width: 120px;
                 height: 100%;
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: bold;
 
                 .icon {
@@ -94,16 +96,16 @@ export const Header: FC = () => {
                 </Link>
                 
                 <div className="menu">
-                    <Link href="/">
-                        <a className="item">
-                            <AiOutlineHome className="icon"/>
-                            Home
-                        </a>
-                    </Link>
                     <Link href="/roadmap">
                         <a className="item">
                             <FaMapSigns className="icon"/>
                             Roadmap
+                        </a>
+                    </Link>
+                    <Link href="/gateway">
+                        <a className="item">
+                            <GiMagicGate className="icon"/>
+                            Gateway
                         </a>
                     </Link>
                     <Link href="/testnet">

@@ -5,9 +5,9 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 import { get } from 'superagent';
 
-export const URL = `https://testnet.amplify.host`;
+export const URL = `https://gateway.amplify.host`;
 
-export const TestnetStatusContainer = styled.div`
+export const GatewayStatusContainer = styled.div`
     width: 100%;
     max-width: 1200px;
     margin: auto;
@@ -66,7 +66,7 @@ export const TestnetStatusContainer = styled.div`
     }
 `;
 
-export const TestnetStatus: FC = () => {
+export const GatewayStatus: FC = () => {
     const [status, setStatus] = useState('Loading');
 
     useEffect(() => {
@@ -81,7 +81,7 @@ export const TestnetStatus: FC = () => {
     }, []);
 
     return(
-        <TestnetStatusContainer>
+        <GatewayStatusContainer>
             <h2>Network Status</h2>
             {
                 status === 'Loading' ?
@@ -112,6 +112,6 @@ export const TestnetStatus: FC = () => {
                     </div>
                 ) : ''
             }
-        </TestnetStatusContainer>
+        </GatewayStatusContainer>
     )
 }
