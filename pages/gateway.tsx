@@ -5,7 +5,7 @@ import { GatewayTitle } from '../components/gateway/gateway.title';
 import { GatewayURL } from '../components/gateway/gateway.url';
 import { GatewayStatus } from '../components/gateway/gateway.status';
 
-export const Index: FC = () => {
+export const Gateway: FC = () => {
   return (
     <AppContainer>
       <Metadata title={`Amplify | Gateway`} />
@@ -16,4 +16,4 @@ export const Index: FC = () => {
   )
 }
 
-export default Index;
+export default Gateway;

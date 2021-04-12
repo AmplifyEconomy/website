@@ -5,7 +5,7 @@ import { RoadmapTitle } from '../components/roadmap/roadmap.title';
 import { RoadmapIntro } from '../components/roadmap/roadmap.intro';
 import { RoadmapItems } from '../components/roadmap/roadmap.items';
 
-export const Investment: FC = () => {
+export const Roadmap: FC = () => {
     return (
       <AppContainer>
         <Metadata title={`Amplify | Roadmap`} />
@@ -16,4 +16,4 @@ export const Investment: FC = () => {
     )
 }
   
-  export default Investment;
+  export default Roadmap;

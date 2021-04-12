@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { AiOutlineHome } from 'react-icons/ai';
+import { BiBookOpen } from 'react-icons/bi';
 import { FaMapSigns } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
 import { FiGithub } from 'react-icons/fi';
@@ -64,6 +64,7 @@ export const HeaderContainer = styled.header`
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                position: relative;
                 width: 120px;
                 height: 100%;
                 font-size: 16px;
@@ -74,7 +75,49 @@ export const HeaderContainer = styled.header`
                 }
 
                 transition: background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-                &:hover { background: rgba(255, 255, 255, 0.25); }
+                &:hover {
+                    background: rgba(255, 255, 255, 0.25);
+
+                    div.sub-items {
+                        opacity: 1;
+                        pointer-events: inherit;
+                    }
+                }
+
+                div.sub-items {
+                    position: absolute;
+                    left: 0;
+                    top: 100%;
+                    width: calc(100% - 4px);
+
+                    background: hsla(200, 100%, 84%, 1);
+                    background: linear-gradient(90deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
+
+                    border-left: 2px solid white;
+                    border-right: 2px solid white;
+                    border-bottom: 2px solid white;
+                    border-radius: 0 0 5px 5px;
+
+                    opacity: 0;
+                    pointer-events: none;
+
+                    transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+
+                    a.sub-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 30px;
+                        font-size: 14px;
+                        transition: background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+                        &:hover { background: rgba(255, 255, 255, 0.25); }
+
+                        .icon {
+                            margin: 0 5px 0 0;
+                        }
+                    }
+                }
             }
         }
     }
@@ -106,6 +149,15 @@ export const Header: FC = () => {
                         <a className="item">
                             <GiMagicGate className="icon"/>
                             Gateway
+
+                            <div className="sub-items">
+                                <Link href="/gateway/guide">
+                                    <a className="sub-item">
+                                        <BiBookOpen className="icon"/>
+                                        Guide
+                                    </a>
+                                </Link>
+                            </div>
                         </a>
                     </Link>
                     <Link href="/testnet">
