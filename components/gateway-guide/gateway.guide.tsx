@@ -27,6 +27,29 @@ export const GatewayGuideContainer = styled.div`
         padding: 15px;
         line-height: 2;
     }
+
+    div.inputs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        div.input {
+            padding: 30px;
+
+            p {
+                text-align: center;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 0 0 5px 0;
+            }
+
+            input {
+                font-size: 18px;
+                width: 180px;
+                height: 48px;
+                padding: 0 15px;
+            }
+        }
+    }
 `;
 
 export const snippet1 = `sudo apt update
@@ -53,28 +76,30 @@ GRANT ALL PRIVILEGES ON DATABASE arweave TO arweave;
 ALTER ROLE arweave WITH SUPERUSER;
 `;
 
-export const pgsnippet2 = `ALTER SYSTEM SET max_connections = '1000';
-ALTER SYSTEM SET shared_buffers = '16GB';
-ALTER SYSTEM SET effective_cache_size = '48GB';
-ALTER SYSTEM SET maintenance_work_mem = '8GB';
+export function tuner(ram: number, cores: number, connections: number) {
+    return `ALTER SYSTEM SET max_connections = '${connections}';
+ALTER SYSTEM SET shared_buffers = '${Math.floor(ram / 4) || 1}GB';
+ALTER SYSTEM SET effective_cache_size = '${Math.floor(ram / 4 * 3) || 1}GB';
+ALTER SYSTEM SET maintenance_work_mem = '${Math.floor(ram / 4) || 1}GB';
 ALTER SYSTEM SET checkpoint_completion_target = '0.9';
 ALTER SYSTEM SET wal_buffers = '64MB';
 ALTER SYSTEM SET default_statistics_target = '100';
 ALTER SYSTEM SET random_page_cost = '2.0';
 ALTER SYSTEM SET effective_io_concurrency = '200';
-ALTER SYSTEM SET work_mem = '64MB';
-ALTER SYSTEM SET min_wal_size = '4GB';
-ALTER SYSTEM SET max_wal_size = '16GB';
-ALTER SYSTEM SET max_worker_processes = '30';
-ALTER SYSTEM SET max_parallel_workers_per_gather = '4';
-ALTER SYSTEM SET max_parallel_workers = '30';
-ALTER SYSTEM SET max_parallel_maintenance_workers = '4';
+ALTER SYSTEM SET work_mem = '128MB';
+ALTER SYSTEM SET min_wal_size = '${Math.floor(ram / 16) || 1}GB';
+ALTER SYSTEM SET max_wal_size = '${Math.floor(ram / 8) || 1}GB';
+ALTER SYSTEM SET max_worker_processes = '${cores}';
+ALTER SYSTEM SET max_parallel_workers_per_gather = '${Math.floor(cores / 4) || 1}';
+ALTER SYSTEM SET max_parallel_workers = '${cores}';
+ALTER SYSTEM SET max_parallel_maintenance_workers = '${Math.floor(cores / 4) || 1}';
 ALTER SYSTEM SET autovacuum_vacuum_scale_factor = '0.1';
-ALTER SYSTEM SET autovacuum_max_workers = '4';
+ALTER SYSTEM SET autovacuum_max_workers = '${Math.floor(cores / 8)}';
 
 --- Do a non intrusive reload after altering system settings
 
-SELECT pg_reload_conf();`
+SELECT pg_reload_conf();`;
+}
 
 export const pgsnippet3 = `--- exit PSQL Terminal
 exit;
@@ -102,6 +127,10 @@ export const snippet6 = `yarn dev:build
 pm2 start dist/src/Gateway.js --name gateway`;
 
 export const GatewayGuide: FC = () => {
+    const [ram, setRam] = useState(32);
+    const [cores, setCores] = useState(16);
+    const [connections, setConnections] = useState(1000);
+
     return(
         <GatewayGuideContainer>
             <h2>Gateway Deployment Guide</h2>
@@ -133,9 +162,39 @@ export const GatewayGuide: FC = () => {
             
             <SyntaxHighlighter className="hl" language="sql" style={style}>{pgsnippet1}</SyntaxHighlighter>
 
-            <p>After, update the Postgres configuration. Make sure to change these system settings to match your server specs.</p>
+            <p>After, update the Postgres configuration. You can customize your RAM and Cores below to match your system configuration.</p>
 
-            <SyntaxHighlighter className="hl" language="sql" style={style}>{pgsnippet2}</SyntaxHighlighter>
+            <div className="inputs">
+                <div className="input">
+                    <p>RAM (in GB)</p>
+                    <input
+                        type="number"
+                        placeholder="32 GB"
+                        value={ram}
+                        onChange={e => setRam(Number(e.target.value))}
+                    />
+                </div>
+                <div className="input">
+                    <p>CPU Cores</p>
+                    <input
+                        type="number"
+                        placeholder="16"
+                        value={cores}
+                        onChange={e => setCores(Number(e.target.value))}
+                    />
+                </div>
+                <div className="input">
+                    <p>Max Connections</p>
+                    <input
+                        type="number"
+                        placeholder="1000"
+                        value={connections}
+                        onChange={e => setConnections(Number(e.target.value))}
+                    />
+                </div>
+            </div>
+
+            <SyntaxHighlighter className="hl" language="sql" style={style}>{tuner(ram, cores, connections)}</SyntaxHighlighter>
 
             <p>Then exit and restart your database.</p>
 
