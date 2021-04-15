@@ -4,6 +4,7 @@ import { AppContainer } from '../theme/Theme.page';
 import { GatewayTitle } from '../components/gateway/gateway.title';
 import { GatewayURL } from '../components/gateway/gateway.url';
 import { GatewayStatus } from '../components/gateway/gateway.status';
+import { GatewayCluster } from '../components/gateway/gateway.cluster';
 
 export const Gateway: FC = () => {
   return (
@@ -12,6 +13,7 @@ export const Gateway: FC = () => {
       <GatewayTitle/>
       <GatewayURL/>
       <GatewayStatus/>
+      <GatewayCluster/>
     </AppContainer>
   )
 }

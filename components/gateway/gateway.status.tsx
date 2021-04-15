@@ -11,7 +11,7 @@ export const GatewayStatusContainer = styled.div`
     width: 100%;
     max-width: 1200px;
     margin: auto;
-    padding: 30px 15px;
+    padding: 30px 15px 60px 15px;
 
     display: flex;
     align-items: center;
