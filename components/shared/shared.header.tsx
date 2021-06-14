@@ -15,14 +15,14 @@ export const HeaderContainer = styled.header`
     height: 40px;
     z-index: 1111;
 
-    background: hsla(200, 100%, 84%, 1);
-    background: linear-gradient(90deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
+    background: white;
+    border-bottom: 2px solid hsla(200, 100%, 84%, 1);
 
-    border-bottom: 2px solid white;
-    color: white;
+    color: hsla(200, 100%, 84%, 1);
     font-family: 'Work Sans', Arial;
 
     div.wrap {
+        position: relative;
         display: flex;
         justify-content: space-between;
         width: 100%;
@@ -31,7 +31,7 @@ export const HeaderContainer = styled.header`
         margin: auto;
 
         a {
-            color: white;
+            color: hsla(200, 100%, 84%, 1);
             text-decoration: none;
             cursor: pointer;
         }
@@ -48,7 +48,8 @@ export const HeaderContainer = styled.header`
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 24px;
+                font-weight: 500;
                 padding: 0 0 2.5px 0;
             }
 
@@ -76,7 +77,7 @@ export const HeaderContainer = styled.header`
 
                 transition: background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
                 &:hover {
-                    background: rgba(255, 255, 255, 0.25);
+                    background: rgba(0, 0, 0, 0.1);
 
                     div.sub-items {
                         opacity: 1;
@@ -90,8 +91,7 @@ export const HeaderContainer = styled.header`
                     top: 100%;
                     width: calc(100% - 4px);
 
-                    background: hsla(200, 100%, 84%, 1);
-                    background: linear-gradient(90deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
+                    background: white;
 
                     border-left: 2px solid white;
                     border-right: 2px solid white;
@@ -111,7 +111,7 @@ export const HeaderContainer = styled.header`
                         height: 30px;
                         font-size: 14px;
                         transition: background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-                        &:hover { background: rgba(255, 255, 255, 0.25); }
+                        &:hover { background: rgba(0, 0, 0, 0.05); }
 
                         .icon {
                             margin: 0 5px 0 0;
@@ -133,7 +133,7 @@ export const Header: FC = () => {
             <div className="wrap">
                 <Link href="/">
                     <a className="brand">
-                        <img src="/image/amplify.white.png"/>
+                        <img src="/image/amplify.png"/>
                         <h1>Amplify</h1>
                     </a>
                 </Link>

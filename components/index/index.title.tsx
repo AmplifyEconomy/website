@@ -6,6 +6,7 @@ export const IndexTitleContainer = styled.div`
   width: 100%;
   min-height: 640px;
   height: 80vh;
+  overflow: hidden;
 
   background: hsla(200, 100%, 84%, 1);
   background: linear-gradient(315deg, hsla(200, 100%, 84%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
@@ -15,20 +16,29 @@ export const IndexTitleContainer = styled.div`
   align-items: center;
   justify-content: center;
 
+  video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
   img {
+    z-index: 1;
     height: 128px;
-    filter: blur(1px);
     margin: 15px 0 0 0;
   }
 
   div.text {
+    position: relative;
     padding: 15px 60px;
 
     h2 {
       font-size: 64px;
       font-weight: 300;
-      padding: 0 0 15px 0;
+      padding: 0 0 30px 0;
     }
+
     p {
       font-size: 24px;
     }
@@ -59,6 +69,10 @@ export const IndexTitleContainer = styled.div`
 export const IndexTitle:FC = () => {
   return (
     <IndexTitleContainer>
+      <video autoPlay loop muted>
+        <source src="/video/gradient.1.mp4" type="video/mp4" />
+      </video>
+     
       <img src="/image/amplify.white.png"/>
       <div className="text">
         <h2>Amplify</h2>
