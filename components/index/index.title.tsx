@@ -5,7 +5,7 @@ export const IndexTitleContainer = styled.div`
   position: relative;
   width: 100%;
   min-height: 640px;
-  height: 80vh;
+  height: 480px;
   overflow: hidden;
 
   background: hsla(200, 100%, 84%, 1);

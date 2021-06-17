@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { GoGlobe } from 'react-icons/go';
 import { BiBookOpen } from 'react-icons/bi';
 import { FaMapSigns } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
@@ -16,9 +17,9 @@ export const HeaderContainer = styled.header`
     z-index: 1111;
 
     background: white;
-    border-bottom: 2px solid hsla(200, 100%, 84%, 1);
+    border-bottom: 2px solid hsla(248, 98%, 84%, 1);
 
-    color: hsla(200, 100%, 84%, 1);
+    color: hsla(248, 98%, 84%, 1);
     font-family: 'Work Sans', Arial;
 
     div.wrap {
@@ -31,7 +32,7 @@ export const HeaderContainer = styled.header`
         margin: auto;
 
         a {
-            color: hsla(200, 100%, 84%, 1);
+            color: hsla(248, 98%, 84%, 1);
             text-decoration: none;
             cursor: pointer;
         }
@@ -72,7 +73,7 @@ export const HeaderContainer = styled.header`
                 font-weight: bold;
 
                 .icon {
-                    margin: 0 10px 0 0;
+                    margin: 0 2.5px 0 0;
                 }
 
                 transition: background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
@@ -145,6 +146,13 @@ export const Header: FC = () => {
                             Roadmap
                         </a>
                     </Link>
+                    <Link href="/daomains">
+                        <a className="item">
+                            <GoGlobe className="icon"/>
+                            DAOmains
+                        </a>
+                    </Link>
+
                     <Link href="/gateway">
                         <a className="item">
                             <GiMagicGate className="icon"/>

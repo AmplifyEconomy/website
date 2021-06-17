@@ -8,14 +8,16 @@ export const IndexMiningContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 0 0 120px 0;
+  padding: 90px 0 120px 0;
 
   div.wrap {
+    background: rgba(255, 255, 255, 0.9);
     width: 100%;
     max-width: 768px;
     min-height: 180px;
-    border-bottom: 2px dashed black;
-    padding: 45px 15px;
+    margin: 15px 0;
+    padding: 30px;
+    border-radius: 32px;
 
     &:last-of-type { border-bottom: none; }
 

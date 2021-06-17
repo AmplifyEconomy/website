@@ -5,7 +5,10 @@ export const RoadmapIntroContainer = styled.div`
     width: 100%;
     max-width: 768px;
     margin: auto;
-    padding: 90px 15px;
+    padding: 30px;
+    margin: 90px auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 32px;
 
     h3 {
         font-size: 24px;

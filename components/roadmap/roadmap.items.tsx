@@ -7,7 +7,10 @@ export const RoadmapItemsContainer = styled.div`
     width: 100%;
     max-width: 768px;
     margin: auto;
-    padding: 15px;
+    padding: 30px;
+
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 32px;
 
     h3 {
         font-size: 24px;
@@ -17,7 +20,7 @@ export const RoadmapItemsContainer = styled.div`
 
     div.line {
         position: absolute;
-        left: 15px;
+        left: 30px;
         top: 30px;
         width: 3px;
         height: calc(100% - 60px);
