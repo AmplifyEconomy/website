@@ -146,12 +146,6 @@ export const Header: FC = () => {
                             Roadmap
                         </a>
                     </Link>
-                    <Link href="/daomains">
-                        <a className="item">
-                            <GoGlobe className="icon"/>
-                            DAOmains
-                        </a>
-                    </Link>
 
                     <Link href="/gateway">
                         <a className="item">
