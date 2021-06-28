@@ -3,12 +3,10 @@ import styled from 'styled-components';
 
 export const RoadmapIntroContainer = styled.div`
     width: 100%;
-    max-width: 768px;
+    max-width: 1200px;
     margin: auto;
-    padding: 30px;
-    margin: 90px auto;
+    padding: 120px 30px;
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 32px;
 
     h3 {
         font-size: 24px;
@@ -22,7 +20,7 @@ export const RoadmapIntroContainer = styled.div`
         padding: 0 0 30px 0;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
         width: auto;
         padding: 30px;
 

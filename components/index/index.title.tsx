@@ -16,13 +16,23 @@ export const IndexTitleContainer = styled.div`
   align-items: center;
   justify-content: center;
 
+  div.wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1920px;
+    margin: auto;
+  }
+
   div.white-bg {
     position: absolute;
     left: 55%;
-    top: -25%;
+    top: -100vh;
     background: white;
-    width: 75%;
-    height: 150%;
+    width: 250vw;
+    height: 150vh;
     transform: rotate(-15deg);
   }
 
@@ -30,7 +40,8 @@ export const IndexTitleContainer = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
   }
 
   img.logo {
@@ -49,9 +60,7 @@ export const IndexTitleContainer = styled.div`
   }
 
   div.text {
-    position: relative;
-    left: -150px;
-    padding: 15px 120px;
+    padding: 45px 210px 45px 45px;
 
     h2 {
       font-size: 64px;
@@ -61,138 +70,31 @@ export const IndexTitleContainer = styled.div`
 
     p {
       font-size: 24px;
+      line-height: 2;
     }
   }
 
-  div.hexagon-wrap {
-    position: absolute;
-    left: -75px;
-    top: -25px;
-
-    width: 150px;
-    height: 150px;
-    
-    cursor: pointer;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    transition: all 1s ease;
-
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      25% {
-        transform: rotate(180deg);
-      }
-      50% {
-        transform: rotate(360deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes border {
-      0% {
-        border-radius: 0%;
-      }
-      25% {
-        border-radius: 50%;
-      }
-      50% {
-        border-radius: 0%;
-      }
-      100% {
-        border-radius: 0%;
-      }
-    }
-
-    animation: rotate 10s infinite;
-
-    &.h2 {
-      left: -75px;
-      top: 110px;
-    }
-
-    &.h3 {
-      left: -75px;
-      top: 245px;
-    }
-
-    &.h4 {
-      left: -75px;
-      top: 380px;
-    }
-
-    &.h5 {
-      left: -75px;
-      top: 515px;
-    }
-    
-
-    div.hexagon {
-      animation: border 10s infinite;
-      &::before, &::after {
-        animation: border 10s infinite;
-      }
-    }
-
-  }
-
-  div.hexagon {
-    width: 52%;
-    height: 90%;
-    
-    background-image: radial-gradient(circle, hsla(266, 73%, 68%, 1) 0%, hsla(248, 98%, 84%, 1) 100%);
-    
-    transition: all .5s ease;
-    
-    position: relative;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    &::before, &::after {
-      content: "";
-      
-      position: absolute;
-    
-      background: inherit;
-      
-      width: 100%;
-      height: 100%;
-      
-      border-radius: 0;
-      
-      transition: all .5s ease;
-      
-      display: flex;
-      align-content: center;
-      justify-content: center;
-      
-    }
-    
-    &::before {
-      transform: rotateZ(60deg);
-    }
-    
-    &::after {
-      transform: rotateZ(-60deg);
-    }
-  }
-
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     flex-direction: column;
+    height: auto;
 
-    img {
-      height: 96px;
+    video, div.white-bg {
+      display: none;
+    }
+
+    div.wrap {
+      flex-direction: column;
+    }
+
+    img.icon {
+      position: static;
+      width: 300px;
+      height: auto;
     }
 
     div.text {
+      padding: 90px 30px;
+      width: 100%;
       text-align: center;
     
       h2 {
@@ -208,50 +110,26 @@ export const IndexTitleContainer = styled.div`
 `;
 
 export const IndexTitle:FC = () => {
-  const [h1, seth1] = useState(false);
-  const [h2, seth2] = useState(false);
-  const [h3, seth3] = useState(false);
-  const [h4, seth4] = useState(false);
-  const [h5, seth5] = useState(false);
-
-  useEffect(() => {
-    setInterval(() => {
-
-    }, 500);
-  }, []);
-
   return (
     <IndexTitleContainer>
       <video autoPlay loop muted>
         <source src="/video/gradient.1.mp4" type="video/mp4" />
       </video>
-     
-      <div className="text">
-        <h2>
-          <img src="/image/amplify.white.png" className="logo"/>
-          Amplify
-        </h2>
-        <p>The Distributed Economy for Bandwidth</p>
-      </div>
 
-      <div className="white-bg">
-        <div className="hexagon-wrap h1">
-          <div className="hexagon"></div>
+      <div className="wrap">
+
+        <div className="text">
+          <h2>
+            <img src="/image/amplify.white.png" className="logo"/>
+            Amplify
+          </h2>
+          <p>The Distributed Economy for Bandwidth</p>
         </div>
-        <div className="hexagon-wrap h2">
-          <div className="hexagon"></div>
-        </div>
-        <div className="hexagon-wrap h3">
-          <div className="hexagon"></div>
-        </div>
-        <div className="hexagon-wrap h4">
-          <div className="hexagon"></div>
-        </div>
-        <div className="hexagon-wrap h5">
-          <div className="hexagon"></div>
-        </div>
+
+        <div className="white-bg"></div>
+        <img src="/image/isometric/graph.png" className="icon"/>
+
       </div>
-      <img src="/image/isometric/graph.png" className="icon"/>
     </IndexTitleContainer>
   )
 }

@@ -10,12 +10,11 @@ export const n2 = `https://gateway-n2.amplify.host`;
 export const n3 = `https://gateway-n3.amplify.host`;
 
 export const GatewayClusterContainer = styled.div`
+    background: white;
     width: 100%;
     max-width: 1200px;
     margin: auto;
-    padding: 60px 15px;
-
-    border-top: 2px dashed rgb(230, 230, 230);
+    padding: 60px 30px;
 
     h2 {
         font-size: 42px;
@@ -27,7 +26,7 @@ export const GatewayClusterContainer = styled.div`
         display: flex;
         background: rgb(245, 245, 245);
         border-radius: 8px;
-        width: 100%;
+        width: calc(100% - 60px);
         height: 120px;
         margin: 30px 0;
         padding: 15px;

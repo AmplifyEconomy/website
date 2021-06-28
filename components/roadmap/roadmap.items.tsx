@@ -5,12 +5,11 @@ import { VscDebugBreakpointData, VscDebugBreakpointDataUnverified } from 'react-
 export const RoadmapItemsContainer = styled.div`
     position: relative;
     width: 100%;
-    max-width: 768px;
+    max-width: 1200px;
     margin: auto;
     padding: 30px;
 
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 32px;
 
     h3 {
         font-size: 24px;
@@ -50,7 +49,7 @@ export const RoadmapItemsContainer = styled.div`
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             display: none;
         }
     }
@@ -86,7 +85,7 @@ export const RoadmapItemsContainer = styled.div`
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             padding: 15px 0;
 
             p {

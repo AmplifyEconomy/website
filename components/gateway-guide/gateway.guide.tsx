@@ -5,7 +5,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import style from 'react-syntax-highlighter/dist/cjs/styles/prism/material-light';
 
 export const GatewayGuideContainer = styled.div`
-    padding: 60px 15px;
+    background: white;
+    padding: 60px 30px;
     width: 100%;
     max-width: 1200px;
     margin: auto;

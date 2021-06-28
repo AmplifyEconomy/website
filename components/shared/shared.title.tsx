@@ -17,7 +17,8 @@ export const TitleContainer = styled.div`
         position: absolute;
         left: 0;
         top: -60%;
-        width: 100%;
+        min-width: 100%;
+        min-height: 100%;
     }
 
     div.wrap {
@@ -52,7 +53,7 @@ export const TitleContainer = styled.div`
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
         div.wrap {
             width: 100%;
             flex-direction: column;

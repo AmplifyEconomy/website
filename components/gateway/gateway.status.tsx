@@ -8,13 +8,17 @@ import { get } from 'superagent';
 export const URL = `https://gateway.amplify.host`;
 
 export const GatewayStatusContainer = styled.div`
+    background: white;
     width: 100%;
     max-width: 1200px;
     margin: auto;
-    padding: 30px 15px 60px 15px;
+    padding: 90px 30px;
 
     display: flex;
     align-items: center;
+
+    border-top: 2px dashed rgb(230, 230, 230);
+    border-bottom: 2px dashed rgb(230, 230, 230);
 
     h2 {
         font-size: 32px;
@@ -45,7 +49,7 @@ export const GatewayStatusContainer = styled.div`
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
         display: block;
         padding: 30px 0;
 

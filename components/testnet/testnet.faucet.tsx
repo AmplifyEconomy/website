@@ -5,10 +5,11 @@ import { post } from 'superagent';
 export const URL = `https://testnet.amplify.host/dispense`;
 
 export const TestnetFaucetContainer = styled.div`
+    background: white;
     width: 100%;
     max-width: 1200px;
     margin: auto;
-    padding: 90px 15px;
+    padding: 90px 30px;
 
     h2 {
         font-size: 32px;
@@ -76,7 +77,7 @@ export const TestnetFaucetContainer = styled.div`
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
         padding: 30px 0;
 
         h2 {

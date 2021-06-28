@@ -5,10 +5,11 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import style from 'react-syntax-highlighter/dist/cjs/styles/prism/material-light';
 
 export const TestnetConnectContainer = styled.div`
+    background: white;
     width: 100%;
     max-width: 1200px;
     margin: auto;
-    padding: 30px 15px;
+    padding: 30px;
 
     display: flex;
     align-items: center;
@@ -25,7 +26,7 @@ export const TestnetConnectContainer = styled.div`
         text-align: center;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
         display: block;
         font-size: 18px;
         padding: 30px 0;

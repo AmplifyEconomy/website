@@ -8,7 +8,7 @@ export const IndexMiningContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 90px 0 120px 0;
+  padding: 120px 0;
 
   div.wrap {
     display: flex;
@@ -17,6 +17,8 @@ export const IndexMiningContainer = styled.div`
     max-width: 1200px;
     min-height: 180px;
     padding: 45px 15px;
+    background: white;
+    border-radius: 0px;
 
     &:last-of-type { border-bottom: none; }
 
@@ -46,15 +48,21 @@ export const IndexMiningContainer = styled.div`
       padding: 30px;
       width: 480px;
       height: auto;
-      border-radius: 32px;
-      background: rgba(255, 255, 255, 0.8);
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     div.wrap {
+      flex-direction: column;
       width: auto;
       padding: 45px 30px;
+
+      &.inverse { flex-direction: column-reverse; }
+
+      div.text {
+        width: 100%;
+        padding: 0;
+      }
 
       h2 {
         font-size: 18px;
@@ -62,6 +70,12 @@ export const IndexMiningContainer = styled.div`
 
       p {
         font-size: 14px;
+      }
+
+      img.left, img.right {
+        left: 0px;
+        width: 300px;
+        height: auto;
       }
     }
   }
@@ -81,7 +95,7 @@ export const IndexMining:FC = () => {
           </p>
         </div>
       </div>
-      <div className="wrap">
+      <div className="wrap inverse">
         <div className="text">
           <h2>A P2P Staking Network</h2>
           <p>
