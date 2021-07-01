@@ -5,9 +5,9 @@ import { GoAlert } from 'react-icons/go';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 
-export const n1 = `https://gateway-n1.amplify.host`;
-export const n2 = `https://gateway-n2.amplify.host`;
-export const n3 = `https://gateway-n3.amplify.host`;
+export const n1 = `http://104.236.197.162`;
+export const n2 = `http://159.203.72.94`;
+export const n3 = `~`;
 
 export const GatewayClusterContainer = styled.div`
     background: white;

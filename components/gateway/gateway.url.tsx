@@ -45,7 +45,7 @@ export const GatewayURLContainer = styled.div`
     }
 `;
 
-export const ConnectURL = `https://gateway.amplify.host`;
+export const ConnectURL = `https://amp-gw.online`;
 
 export const GatewayURL: FC = () => {
     return(

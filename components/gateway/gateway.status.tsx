@@ -5,7 +5,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 import { get } from 'superagent';
 
-export const URL = `https://gateway.amplify.host`;
+export const URL = `https://amp-gw.online`;
 
 export const GatewayStatusContainer = styled.div`
     background: white;
