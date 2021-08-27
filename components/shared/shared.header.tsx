@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { GoGlobe } from 'react-icons/go';
+import { MdStore } from 'react-icons/md';
 import { BiBookOpen } from 'react-icons/bi';
-import { FaMapSigns } from 'react-icons/fa';
+import { BsWallet } from 'react-icons/bs';
 import { BiNetworkChart } from 'react-icons/bi';
 import { FiGithub } from 'react-icons/fi';
 import { GiMagicGate } from 'react-icons/gi';
@@ -67,7 +67,7 @@ export const HeaderContainer = styled.header`
                 align-items: center;
                 justify-content: center;
                 position: relative;
-                width: 120px;
+                padding: 0 15px;
                 height: 100%;
                 font-size: 16px;
                 font-weight: bold;
@@ -140,10 +140,17 @@ export const Header: FC = () => {
                 </Link>
                 
                 <div className="menu">
-                    <Link href="/roadmap">
+                    <Link href="/swap">
                         <a className="item">
-                            <FaMapSigns className="icon"/>
-                            Roadmap
+                            <BsWallet className="icon"/>
+                            Swap
+                        </a>
+                    </Link>
+
+                    <Link href="/marketplace">
+                        <a className="item">
+                            <MdStore className="icon"/>
+                            Marketplace
                         </a>
                     </Link>
 
@@ -162,13 +169,15 @@ export const Header: FC = () => {
                             </div>
                         </a>
                     </Link>
+
                     <Link href="/testnet">
                         <a className="item">
                             <BiNetworkChart className="icon"/>
                             Testnet
                         </a>
                     </Link>
-                    <a className="item" href="https://github.com/AmplifyEconomy" target="_blank">
+
+                    <a className="item" href="https://github.com/AmplifyEconomy" target="github">
                         <FiGithub className="icon"/>
                         Github
                     </a>
