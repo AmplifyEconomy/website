@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { BsArrowRepeat } from 'react-icons/bs';
 
 export const SwapAppContainer = styled.div`
     width: 100%;
@@ -37,16 +38,79 @@ export const SwapAppContainer = styled.div`
             opacity: 0.4;
             &.active {
                 opacity: 1;
+                box-shadow: 0 0 45px rgba(0, 0, 0, 0.25);
             }
         }
     }
 
     div.swap {
+        position: relative;
+
         display: flex;
         align-items: center;
         width: 100%;
         height: 320px;
         border-bottom: 2px dashed rgb(230, 230, 230);
+
+        .swap-icon {
+            position: absolute;
+            left: calc(50% - 32px);
+            top: calc(50% - 16px);
+            font-size: 64px;
+            transform: rotate(75deg);
+        }
+
+        a.button {
+            position: absolute;
+            left: calc(50% - 90px);
+            top: calc(50% - 80px);
+            z-index: 11;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            height: 50px;
+            border-radius: 5px;
+
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+
+            opacity: 0.5;
+            &.active {
+                opacity: 1;
+                box-shadow: 0 0 45px rgba(0, 0, 0, 0.25);
+            }
+
+            &.buy {
+                background: hsla(105, 100%, 78%, 1);
+                background: linear-gradient(135deg, hsla(105, 100%, 78%, 1) 0%, hsla(108, 100%, 57%, 1) 100%);
+                background: -moz-linear-gradient(135deg, hsla(105, 100%, 78%, 1) 0%, hsla(108, 100%, 57%, 1) 100%);
+                background: -webkit-linear-gradient(135deg, hsla(105, 100%, 78%, 1) 0%, hsla(108, 100%, 57%, 1) 100%);
+                filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ABFF8F", endColorstr="#52FF26", GradientType=1 );
+            }
+
+            &.sell {
+                top: calc(50% + 60px);
+
+                background: hsla(0, 100%, 84%, 1);
+                background: linear-gradient(135deg, hsla(0, 100%, 84%, 1) 0%, hsla(7, 73%, 48%, 1) 100%);
+                background: -moz-linear-gradient(135deg, hsla(0, 100%, 84%, 1) 0%, hsla(7, 73%, 48%, 1) 100%);
+                background: -webkit-linear-gradient(135deg, hsla(0, 100%, 84%, 1) 0%, hsla(7, 73%, 48%, 1) 100%);
+                filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FFAFAF", endColorstr="#D43621", GradientType=1 );
+            }
+        }
+
+        p.slippage {
+            position: absolute;
+            right: 15px;
+            bottoM: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
         div.swap-side {
             position: relative;
@@ -155,6 +219,7 @@ export const SwapAppContainer = styled.div`
         width: 320px;
         height: 60px;
         margin: 30px auto 0 auto;
+        box-shadow: 0 0 45px rgba(0, 0, 0, 0.25);
 
         background: hsla(202, 100%, 84%, 1);
         background: linear-gradient(90deg, hsla(202, 100%, 84%, 1) 0%, hsla(246, 97%, 85%, 1) 100%);
@@ -194,6 +259,16 @@ export const SwapApp: FC = () => {
                 </p>
             </div>
             <div className="swap">
+                <BsArrowRepeat className="swap-icon"/>
+                <a className="button buy active">
+                    Buy AKT
+                </a>
+                <a className="button sell">
+                    Sell AKT
+                </a>
+
+                <p className="slippage">Approx Slippage: ~0.1%</p>
+
                 <div className="swap-side">
                     <img src="/image/amplify.png"/>
                     <div className="input">

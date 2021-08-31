@@ -140,12 +140,16 @@ export const Header: FC = () => {
                 </Link>
                 
                 <div className="menu">
-                    <Link href="/swap">
-                        <a className="item">
-                            <BsWallet className="icon"/>
-                            Swap
-                        </a>
-                    </Link>
+                    {
+                        /*
+                        <Link href="/swap">
+                            <a className="item">
+                                <BsWallet className="icon"/>
+                                Swap
+                            </a>
+                        </Link>
+                        */
+                    }
 
                     <Link href="/marketplace">
                         <a className="item">

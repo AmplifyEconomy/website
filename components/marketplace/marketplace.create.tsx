@@ -1,5 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
+import { setCreateInput } from '../../redux/redux.app';
 
 export const MarketplaceCreateContainer = styled.div`
     h2 {
@@ -109,20 +112,50 @@ export const MarketplaceCreateContainer = styled.div`
     }
 `;
 
-export const MarketplaceCreate: FC = () => {
+export const MarketplaceCreateState = state => ({
+    name: state.app.create.name,
+    url: state.app.create.url,
+    description: state.app.create.description,
+    consensus: state.app.create.consensus,
+    network: state.app.create.network,
+    networkAppName: state.app.create.networkAppName,
+    token: state.app.create.token,
+    pool: state.app.create.pool,
+    epoch: state.app.create.epoch,
+    distribution: state.app.create.distribution,
+    nodes: state.app.create.nodes,
+})
+
+export interface MarketplaceCreateI {
+    name: string;
+    url: string;
+    description: string;
+    consensus: string;
+    network: string;
+    networkAppName: string;
+    token: string;
+    pool: number;
+    epoch: number;
+    distribution: number;
+    nodes: number;
+
+    setCreateInput(state: { key: string, value: string | number }): void;
+}
+
+export const MarketplaceCreateComponent: FC<MarketplaceCreateI> = ({ name, url, description, consensus, network, networkAppName, token, pool, epoch, distribution, nodes, setCreateInput }) => {
     return(
         <MarketplaceCreateContainer>
             <h2>Create A New Network</h2>
             
             <p>Network Name</p>
-            <input type="text" placeholder="Name of Network..."/>
+            <input type="text" placeholder="Name of Network..." value={name} onChange={e => setCreateInput({ key: 'name', value: e.target.value })}/>
 
             <p>Network URL</p>
-            <input type="text" placeholder="A valid TLD..."/>
+            <input type="text" placeholder="A valid TLD..." value={url} onChange={e => setCreateInput({ key: 'url', value: e.target.value })}/>
 
             <p>Description</p>
 
-            <textarea placeholder="Description of Network"></textarea>
+            <textarea placeholder="Description of Network" value={description} onChange={e => setCreateInput({ key: 'description', value: e.target.value })}></textarea>
 
             <div className="traits">
                 <p>Consensus Type</p>
@@ -139,50 +172,60 @@ export const MarketplaceCreate: FC = () => {
 
                 <p>Network Type</p>
 
-                <a className="option">
-                    <div className="cb active"></div>
+                <a className="option" onClick={e => setCreateInput({ key: 'network', value: 'full' })}>
+                    <div className={`cb ${network === 'full' ? 'active' : ''}`}></div>
                     Full Node  
                 </a>
-                <a className="option">
-                    <div className="cb"></div>
+                <a className="option" onClick={e => setCreateInput({ key: 'network', value: 'app' })}>
+                    <div className={`cb ${network === 'app' ? 'active' : ''}`}></div>
                     App Node  
                 </a>
-                <a className="option">
+                <a className="option inactive">
                     <div className="cb"></div>
                     Custom Node  
                 </a>
 
+                {
+                    network === 'app' ?
+                    <>
+                        <p>App-Name</p>
+                        <input type="text" placeholder="The App-Name tag" value={networkAppName} onChange={e => setCreateInput({ key: 'networkAppName', value: e.target.value })}/>
+                    </>
+                    :
+                    ''
+                }
+
                 <p>Token Distribution</p>
 
-                <a className="option">
-                    <div className="cb active"></div>
+                <a className="option" onClick={e => setCreateInput({ key: 'token', value: 'amp' })}>
+                    <div className={`cb ${token === 'amp' ? 'active' : ''}`}></div>
                     AMP  
                 </a>
-                <a className="option">
-                    <div className="cb"></div>
+                <a className="option" onClick={e => setCreateInput({ key: 'token', value: 'ar' })}>
+                    <div className={`cb ${token === 'ar' ? 'active' : ''}`}></div>
                     AR  
                 </a>
-                <a className="option">
+                <a className="option inactive">
                     <div className="cb"></div>
                     PST  
                 </a>
-                <a className="option">
+                <a className="option inactive">
                     <div className="cb"></div>
                     Custom  
                 </a>
             </div>
 
             <p>Initial Pool (in AMP)</p>
-            <input type="number" placeholder="#" min={0}/>
+            <input type="number" placeholder="#" min={0} value={pool} onChange={e => setCreateInput({ key: 'pool', value: e.target.value })}/>
 
             <p>Epoch (in blocks)</p>
-            <input type="number" placeholder="#" min={0}/>
+            <input type="number" placeholder="#" min={0} value={epoch} onChange={e => setCreateInput({ key: 'epoch', value: e.target.value })}/>
 
             <p>Epoch Distribution (in AMP)</p>
-            <input type="number" placeholder="#" min={0}/>
+            <input type="number" placeholder="#" min={0} value={distribution} onChange={e => setCreateInput({ key: 'distribution', value: e.target.value })}/>
 
             <p>Maximum Nodes</p>
-            <input type="number" placeholder="#" min={0}/>
+            <input type="number" placeholder="#" min={0} value={nodes} onChange={e => setCreateInput({ key: 'nodes', value: e.target.value })}/>
 
             <div className="create-button">
                 <a className="button">Create</a>
@@ -190,3 +233,5 @@ export const MarketplaceCreate: FC = () => {
         </MarketplaceCreateContainer>
     )
 }
+
+export const MarketplaceCreate = connect(MarketplaceCreateState, { setCreateInput })(MarketplaceCreateComponent);

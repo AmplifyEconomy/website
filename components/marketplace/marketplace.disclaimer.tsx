@@ -22,8 +22,7 @@ export const MarketplaceDisclaimer: FC = () => {
     return(
         <MarketplaceDisclaimerContainer>
             <p>
-                Please note that all Smartweave interactions on this webpage are for DEMO purposes. Amplify and Akash Smartweave contracts
-                and liquidity pools will be operational by early September. These pages are currently for showcase purposes.
+                Please note that all Smartweave interactions on this webpage are for DEMO purposes.
             </p>
         </MarketplaceDisclaimerContainer>
     )

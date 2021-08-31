@@ -1,8 +1,14 @@
-import { FC } from 'react';
+import { FC, useLayoutEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { setArconnect, setAddress } from '../../redux/redux.marketplace';
+
+declare const window: any;
 
 export const ArconnectContainer = styled.div`
     width: 100%;
+
+    &.invisible { display: none ;}
 
     div.title {
         display: flex;
@@ -55,9 +61,48 @@ export const ArconnectContainer = styled.div`
     }
 `;
 
-export const Arconnect: FC = () => {
+export const ArconnectState = (state) => ({
+    arconnect: state.marketplace.arconnect,
+    address: state.marketplace.address,
+})
+
+export interface ArconnectI {
+    arconnect: boolean;
+    address: string;
+    setArconnect(payload: boolean): void;
+    setAddress(payload: string): void;
+}
+
+export const ArconnectComponent: FC<ArconnectI> = ({ arconnect, setArconnect, address, setAddress }) => {
+    useLayoutEffect(() => {
+        window.addEventListener('loadWallet', async () => {
+            await window.arweaveWallet.connect(
+                ['ACCESS_ADDRESS', 'ACCESS_ALL_ADDRESSES', 'SIGN_TRANSACTION'],
+                {
+                    name: 'Amplify',
+                    logo: 'https://amplify.host/image/amplify.png',
+                },
+            )
+
+            const activeAddress = await window.arweaveWallet.getActiveAddress();
+
+            console.log('ArConnect connected with', activeAddress);
+
+            setArconnect(true);
+            setAddress(activeAddress);
+        })
+
+        window.addEventListener('walletSwitch', (e) => {
+            const newAddress = e.detail.address;
+
+            console.log('ArConnect connected with', newAddress);
+
+            setAddress(newAddress);
+        })
+    }, []);
+
     return(
-        <ArconnectContainer>
+        <ArconnectContainer className={arconnect ? 'invisible' : 'visible'}>
             <div className="title">
                 <img src="/image/arconnect.png"/>
                 <h2>Use this dApp with ArConnect</h2>
@@ -75,3 +120,5 @@ export const Arconnect: FC = () => {
         </ArconnectContainer>
     )
 }
+
+export const Arconnect = connect(ArconnectState, { setArconnect, setAddress })(ArconnectComponent);

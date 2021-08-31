@@ -1,9 +1,10 @@
 import '../theme/Reset.css';
-import { RootContainer } from '../theme/Theme.page';
 import App, { AppContext, AppInitialProps } from 'next/app';
+import { wrapper } from '../redux/redux.store';
+import { RootContainer } from '../theme/Theme.page';
 import { Header } from '../components/shared/shared.header';
 
-export default class Website extends App<AppInitialProps> {
+export class Website extends App<AppInitialProps> {
   public static getInitialProps = async ({ Component, ctx }: AppContext) => {
     return {
       pageProps: {
@@ -29,3 +30,5 @@ export default class Website extends App<AppInitialProps> {
     )
   }
 }
+
+export default wrapper.withRedux(Website);

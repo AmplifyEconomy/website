@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
+import { setSearchInput } from '../../redux/redux.app';
 
 export const MarketplaceSearchContainer = styled.div`
     position: relative;
@@ -62,7 +65,16 @@ export const MarketplaceSearchContainer = styled.div`
     }
 `;
 
-export const MarketplaceSearch: FC = () => {
+export const MarketplaceSearchState = state => ({
+    input: state.app.search.input,
+})
+
+export interface MarketplaceSearchI {
+    input: string;
+    setSearchInput(state: string): void;
+}
+
+export const MarketplaceSearchComponent: FC<MarketplaceSearchI> = ({ input, setSearchInput }) => {
     return(
         <MarketplaceSearchContainer>
             <Link href="/marketplace/create">
@@ -71,7 +83,7 @@ export const MarketplaceSearch: FC = () => {
                 </a>
             </Link>
 
-            <input type="text" placeholder="Type To Search For Apps..."/>
+            <input type="text" placeholder="Type To Search For Apps..." value={input} onChange={e => setSearchInput(e.target.value)}/>
 
             <a className="button">
                 Search
@@ -79,3 +91,5 @@ export const MarketplaceSearch: FC = () => {
         </MarketplaceSearchContainer>
     )
 }
+
+export const MarketplaceSearch = connect(MarketplaceSearchState, { setSearchInput })(MarketplaceSearchComponent);
