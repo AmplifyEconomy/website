@@ -2,6 +2,7 @@ import { FC, useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { setArconnect, setAddress } from '../../redux/redux.marketplace';
+import { initArweave, Contract } from '../../arweave';
 
 declare const window: any;
 
@@ -90,6 +91,10 @@ export const ArconnectComponent: FC<ArconnectI> = ({ arconnect, setArconnect, ad
 
             setArconnect(true);
             setAddress(activeAddress);
+
+            await window.arweaveWallet.addToken(Contract);
+
+            initArweave();
         })
 
         window.addEventListener('walletSwitch', (e) => {

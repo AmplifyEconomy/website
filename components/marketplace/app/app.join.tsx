@@ -1,7 +1,9 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
+import { arweave, Contract } from '../../../arweave';
 import { setJoinUrl, setJoinAddress } from '../../../redux/redux.app';
 
 export const AppJoinContainer = styled.div`
@@ -43,23 +45,55 @@ export const AppJoinContainer = styled.div`
             }
         }
     }
+
+    div.loading {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1111;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.4);
+        color: white;
+        font-size: 24px;
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icon {
+            animation: rotate 1s infinite;
+        }
+
+        h3 {
+            padding: 30px;
+        }
+
+        &.active {
+            display: flex;
+        }
+    }
 `;
 
 export const AppJoinState = state => ({
-    arAddress: state.marketplace.address,
     url: state.app.join.url,
-    address: state.app.join.address,
+    name: state.marketplace.name,
 })
 
 export interface AppJoinI {
-    arAddress: string;
     url: string;
-    address: string;
+    name: string;
     setJoinUrl(state: string): void;
-    setJoinAddress(state: string): void;
 }
 
-export const AppJoinComponent: FC<AppJoinI> = ({ arAddress, url, address, setJoinUrl, setJoinAddress }) => {
+export const AppJoinComponent: FC<AppJoinI> = ({ url, name, setJoinUrl }) => {
+    const [loading, setLoading] = useState(false);
+
     return(
         <AppJoinContainer>
             <div className="request">
@@ -68,18 +102,39 @@ export const AppJoinComponent: FC<AppJoinI> = ({ arAddress, url, address, setJoi
                 <p>Node URL</p>
                 <input type="text" placeholder="192.168.0.1" value={url} onChange={e => setJoinUrl(e.target.value)}/>
 
-                <p>
-                    Wallet Address
-                    <a className="mini-button" onClick={e => setJoinAddress(arAddress)}>
-                        Use ArConnect Address
-                    </a>
-                </p>
-                <input type="text" placeholder="Arweave Address" value={address} onChange={e => setJoinAddress(e.target.value)}/>
-
                 <div className="request-button">
-                    <a className="button">
+                    <a className="button" onClick={async e => {
+                        setLoading(true);
+
+                        const tx = await arweave.createTransaction({ data: ` ` });
+    
+                        tx.addTag(`App-Name`, `SmartWeaveAction`);
+                        tx.addTag(`App-Version`, `0.3.0`);
+                        tx.addTag(`Contract`, Contract);
+                        tx.addTag(
+                            `Input`,
+                            JSON.stringify({
+                                function: 'join',
+                                name,
+                                url,
+                            })
+                        );
+    
+                        await arweave.transactions.sign(tx);
+                        await arweave.transactions.post(tx);
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 5000);
+                    }}>
                         Join
                     </a>
+                </div>
+
+                <div className={`loading ${loading ? 'active' : ''}`}>
+                    <AiOutlineLoading3Quarters className="icon"/>
+                    <h3>Creating join request... Please wait...</h3>
+                    <h4>Page will refresh on completion...</h4>
                 </div>
             </div>
         </AppJoinContainer>

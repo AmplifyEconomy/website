@@ -1,6 +1,10 @@
+import { readContract } from 'smartweave';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useState, useLayoutEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { arweave, Contract } from '../../arweave';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export const MarketplaceResultsContainer = styled.div`
     width: 100%;
@@ -92,60 +96,153 @@ export const MarketplaceResultsContainer = styled.div`
             }
         }
     }
+
+    div.loading {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 420px;
+        font-size: 32px;
+
+        &.active {
+            display: flex;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icon {
+            animation: rotate 1s infinite;
+        }
+
+        h3 {
+            padding: 30px;
+        }
+    }
 `;
 
-export const MarketplaceResults: FC = () => {
+export const MarketplaceResultsState = state => ({
+    input: state.app.search.input
+})
+
+export interface MarketplaceResultsI {
+    input: string;
+}
+
+export const MarketplaceResultsComponent: FC<MarketplaceResultsI> = ({ input }) => {
+    const [loading, setLoading] = useState(false);
+    const [networks, setNetworks] = useState({} as any);
+
+    async function loadNetworks() {
+        setLoading(true);
+
+        if (arweave) {      
+            const contract = await readContract(arweave, Contract);
+            setNetworks(contract.networks);
+            setLoading(false);
+        } else {
+            setTimeout(() => {
+                loadNetworks();
+            }, 1000);
+        }
+    }
+
+    useLayoutEffect(() => {
+        loadNetworks();
+    }, []);
+
     return(
         <MarketplaceResultsContainer>
-            <a className="result">
-                <div className="image">
-                    <img src="/image/amplify.png"/>
-                </div>
-                <div className="text">
-                    <h3>
-                        Amplify Main Network
-                        <a className="network-link">(https://amp-gw.online)</a>
-                    </h3>
-                    <div className="traits">
-                        <div className="trait">
-                            <p>Consensus Type</p>
-                            <h4>Approval Based</h4>
+            {
+            Object
+            .keys(networks)
+            .filter(key => {
+                const network = networks[key];
+
+                if (input.length === 0) {
+                    return true;
+                }
+
+                if (key.toLowerCase().indexOf(input.toLowerCase()) !== -1) {
+                    return true;
+                }
+
+                if (network.url.toLowerCase().indexOf(input.toLowerCase()) !== -1) {
+                    return true;
+                }
+
+                return false;
+            })
+            .map(key => {
+                const network = networks[key];
+
+                return(
+                <a className="result">
+                    <div className="image">
+                        <img src="/image/amplify.png"/>
+                    </div>
+                    <div className="text">
+                        <h3>
+                            {key}
+                            <a className="network-link" href={network.url} target={network.url}>({network.url})</a>
+                        </h3>
+                        <div className="traits">
+                            <div className="trait">
+                                <p>Consensus Type</p>
+                                <h4>Approval Based</h4>
+                            </div>
+                            <div className="trait">
+                                <p>Network Type</p>
+                                <h4>{network.network.toUpperCase()} Node</h4>
+                            </div>
+                            <div className="trait">
+                                <p>Token Distribution</p>
+                                <h4>AMP</h4>
+                            </div>
+                            <div className="trait">
+                                <p>Epoch</p>
+                                <h4>{network.epoch} Blocks</h4>
+                            </div>
+                            <div className="trait">
+                                <p>Epoch Distribution Value</p>
+                                <h4>{network.distribution} AMP</h4>
+                            </div>
+                            <div className="trait">
+                                <p>Node Pool</p>
+                                <h4>{Object.keys(network.nodes).length}/{network.maxNodes}</h4>
+                            </div>
                         </div>
-                        <div className="trait">
-                            <p>Network Type</p>
-                            <h4>Full Node</h4>
-                        </div>
-                        <div className="trait">
-                            <p>Token Distribution</p>
-                            <h4>AMP</h4>
-                        </div>
-                        <div className="trait">
-                            <p>Epoch</p>
-                            <h4>100 Blocks</h4>
-                        </div>
-                        <div className="trait">
-                            <p>Epoch Distribution Value</p>
-                            <h4>100 AMP</h4>
-                        </div>
-                        <div className="trait">
-                            <p>Node Pool</p>
-                            <h4>9/10</h4>
+
+                        <p>
+                            {network.description}
+                        </p>
+
+                        <div className="button">
+                            <Link href={`/marketplace/app/${key}`}>
+                                <a className="button">
+                                    View Network
+                                </a>
+                            </Link>
                         </div>
                     </div>
+                </a>
+                )
+            })
+            }
 
-                    <p>
-                        This is the Amplify Main Network. Need to figure out a good description.
-                    </p>
-
-                    <div className="button">
-                        <Link href="/marketplace/app/demo">
-                            <a className="button">
-                                View Network
-                            </a>
-                        </Link>
-                    </div>
-                </div>
-            </a>
+            <div className={`loading ${(loading && Object.keys(networks).length === 0) ? 'active' : ''}`}>
+                <AiOutlineLoading3Quarters className="icon"/>
+                <h3>Loading Networks...</h3>
+            </div>
+            <div className={`loading ${(!loading && Object.keys(networks).length === 0) ? 'active' : ''}`}>
+                <h3>No Amplify networks have been created yet</h3>
+            </div>
         </MarketplaceResultsContainer>
     )
 }
+
+export const MarketplaceResults = connect(MarketplaceResultsState)(MarketplaceResultsComponent);

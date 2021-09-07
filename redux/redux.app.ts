@@ -1,7 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 export const initialState = {
-    popup: false,
     search: {
         input: '',
         consensus: {
@@ -15,7 +14,7 @@ export const initialState = {
         },
         token: {
             amp: true,
-            ar: true,
+            ar: false,
             pst: false,
             custom: false,
         },
@@ -27,6 +26,7 @@ export const initialState = {
         consensus: 'approval',
         network: 'full',
         networkAppName: '',
+        networkId: '',
         token: 'amp',
         pool: 0,
         epoch: 0,
@@ -43,9 +43,6 @@ export const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
-        setPopup(state, action) {
-            state.popup = action.payload ?? false;
-        },
         setSearchInput(state, action) {
             state.search.input = action.payload ?? '';
         },
@@ -65,7 +62,6 @@ export const appSlice = createSlice({
 })
 
 export const {
-    setPopup,
     setSearchInput,
     setSearchToggle,
     setCreateInput,

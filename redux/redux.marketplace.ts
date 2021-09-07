@@ -3,6 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 export const initialState = {
     arconnect: false,
     address: '',
+    name: '',
 }
 
 export const marketplaceSlice = createSlice({
@@ -15,10 +16,14 @@ export const marketplaceSlice = createSlice({
         setAddress(state, action) {
             state.address = action.payload ?? '';
         },
+        setName(state, action) {
+            state.name = action.payload ?? '';
+        }
     },
 })
 
 export const {
     setArconnect,
     setAddress,
+    setName,
 } = marketplaceSlice.actions;

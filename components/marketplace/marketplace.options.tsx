@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import { setSearchToggle } from '../../redux/redux.app';
+import { Checkbox } from '../shared/shared.checkbox';
 
 export const MarketplaceOptionsContainer = styled.div`
     display: flex;
@@ -17,36 +18,6 @@ export const MarketplaceOptionsContainer = styled.div`
         letter-spacing: 0.5px;
         padding: 30px 30px 15px 30px;
         width: 100%;
-    }
-
-    a.option {
-        display: flex;
-        align-items: center;
-        width: 50%;
-        height: 40px;
-        padding: 0 30px;
-        cursor: pointer;
-
-        &:hover {
-            div.cb {
-                background: rgba(185, 177, 254, 0.5);
-            }
-        }
-
-        div.cb {
-            border: 3px solid #B9B1FE;
-            margin: 0 15px 0 0;
-            width: 20px;
-            height: 20px;
-
-            &.active {
-                background: #B9B1FE;
-            }
-        }
-
-        &.inactive {
-          opacity: 0.25;
-        }
     }
 `;
 
@@ -93,48 +64,21 @@ export const MarketplaceOptionsComponent: FC<MarketplaceOptionsI> = ({ consensus
         <MarketplaceOptionsContainer>
             <p>Consensus Type</p>
 
-            <a className="option">
-              <div className="cb active"></div>
-              Approval Based  
-            </a>
-            <a className="option inactive">
-              <div className="cb"></div>
-              Quorum (Experimental)
-            </a>
+            <Checkbox label="Approval Based" active={true}/>
+            <Checkbox label="Quorum (Experimental)" active={false} disabled={true}/>
 
             <p>Network Type</p>
 
-            <a className="option" onClick={e => setSearchToggle({ section: 'network', key: 'full', value: !network.full})}>
-              <div className={`cb ${network.full ? 'active' : ''}`}></div>
-              Full Node  
-            </a>
-            <a className="option" onClick={e => setSearchToggle({ section: 'network', key: 'app', value: !network.app})}>
-              <div className={`cb ${network.app ? 'active' : ''}`}></div>
-              App Node  
-            </a>
-            <a className="option inactive">
-              <div className={`cb ${network.custom ? 'active' : ''}`}></div>
-              Custom Node  
-            </a>
+            <Checkbox label="Full Node" active={network.full} onClick={e => setSearchToggle({ section: 'network', key: 'full', value: !network.full})}/>
+            <Checkbox label="App Node" active={network.app} onClick={e => setSearchToggle({ section: 'network', key: 'app', value: !network.app})}/>
+            <Checkbox label="Custom Node" active={network.custom} disabled={true}/>
 
             <p>Token Distribution</p>
 
-            <a className="option" onClick={e => setSearchToggle({ section: 'token', key: 'amp', value: !token.amp})}>
-              <div className={`cb ${token.amp ? 'active' : ''}`}></div>
-              AMP  
-            </a>
-            <a className="option" onClick={e => setSearchToggle({ section: 'token', key: 'ar', value: !token.ar})}>
-              <div className={`cb ${token.ar ? 'active' : ''}`}></div>
-              AR  
-            </a>
-            <a className="option inactive">
-              <div className={`cb ${token.pst ? 'active' : ''}`}></div>
-              PST  
-            </a>
-            <a className="option inactive">
-              <div className={`cb ${token.custom ? 'active' : ''}`}></div>
-              Custom  
-            </a>
+            <Checkbox label="AMP" active={true}/>
+            <Checkbox label="AR" active={false} disabled={true}/>
+            <Checkbox label="PST" active={false} disabled={true}/>
+            <Checkbox label="Custom" active={false} disabled={true}/>
         </MarketplaceOptionsContainer>
     );
 }

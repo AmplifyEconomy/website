@@ -6,7 +6,7 @@ import { Arconnect } from '../components/shared/shared.arconnect';
 import { SwapVerto } from '../components/swap/swap.verto';
 import { SwapApp } from '../components/swap/swap.app';
 
-export const Marketplace: FC = () => {
+export const Swap: FC = () => {
     return (
       <AppContainer>
         <Metadata title={`Amplify | Swap`} />
@@ -21,4 +21,4 @@ export const Marketplace: FC = () => {
     )
   }
   
-  export default Marketplace;
+  export default Swap;

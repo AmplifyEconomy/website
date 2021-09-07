@@ -5,19 +5,24 @@ export const AppNodesContainer = styled.div`
     div.node-links {
         padding: 30px 0;
 
+        h4.heading {
+            font-size: 24px;
+            text-align: center;
+            padding: 60px 0;
+        }
+
         div.node {
             display: flex;
-            flex-wrap: wrap;
             width: 100%;
             border-bottom: 2px dashed rgb(230, 230, 230);
             padding: 10px 0;
 
             div.node-column {
                 padding: 10px 0;
-                width: calc(100% / 3);
+                width: 35%;
 
                 &.full {
-                    width: 100%;
+                    width: 65%;
                 }
 
                 p {
@@ -34,49 +39,41 @@ export const AppNodesContainer = styled.div`
     }
 `;
 
-export const AppNodes: FC = () => {
+export interface AppNodesI {
+    nodes: any;
+}
+
+export const AppNodes: FC<AppNodesI> = ({ nodes }) => {
     return(
         <AppNodesContainer>
             <div className="node-links">
                 <h3>Active Nodes</h3>
 
-                <div className="node">
-                    <div className="node-column">
-                        <p>Node URL</p>
-                        <h4>192.168.0.1</h4>
-                    </div>
-                    <div className="node-column">
-                        <p>Tokens Received</p>
-                        <h4>1,000,000 AMP</h4>
-                    </div>
-                    <div className="node-column">
-                        <p>Date Joined</p>
-                        <h4>August 1st, 2021</h4>
-                    </div>
-                    <div className="node-column full">
-                        <p>Node Arweave Address</p>
-                        <h4>dow7mxks0QGGV7zOmHEE1OOi5LyfHpcrDH9n0UPw9eY</h4>
-                    </div>
-                </div>
+                {
+                    Object.keys(nodes).length === 0 ?
+                        <h4 className="heading">No one has joined the network yet!</h4>
+                        :
+                        ''
+                }
 
-                <div className="node">
-                    <div className="node-column">
-                        <p>Node URL</p>
-                        <h4>192.168.0.1</h4>
-                    </div>
-                    <div className="node-column">
-                        <p>Tokens Received</p>
-                        <h4>1,000,000 AMP</h4>
-                    </div>
-                    <div className="node-column">
-                        <p>Date Joined</p>
-                        <h4>August 1st, 2021</h4>
-                    </div>
-                    <div className="node-column full">
-                        <p>Node Arweave Address</p>
-                        <h4>dow7mxks0QGGV7zOmHEE1OOi5LyfHpcrDH9n0UPw9eY</h4>
-                    </div>
-                </div>
+                {
+                    Object.keys(nodes).map(key => {
+                        const node = nodes[key];
+
+                        return(
+                            <div className="node">
+                                <div className="node-column">
+                                    <p>Node URL</p>
+                                    <h4>{node.url}</h4>
+                                </div>
+                                <div className="node-column full">
+                                    <p>Node Arweave Address</p>
+                                    <h4>{key}</h4>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </AppNodesContainer>
     )

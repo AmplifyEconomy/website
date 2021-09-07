@@ -1,8 +1,13 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-
 import { setCreateInput } from '../../redux/redux.app';
+import { arweave, Contract } from '../../arweave';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { Checkbox } from '../shared/shared.checkbox';
+import { Button } from '../shared/shared.button';
+
+declare const window;
 
 export const MarketplaceCreateContainer = styled.div`
     h2 {
@@ -52,62 +57,45 @@ export const MarketplaceCreateContainer = styled.div`
             padding: 30px 30px 15px 30px;
             width: 100%;
         }
-    
-        a.option {
-            display: flex;
-            align-items: center;
-            width: 50%;
-            height: 40px;
-            padding: 0 30px;
-            cursor: pointer;
-    
-            &:hover {
-                div.cb {
-                    background: rgba(185, 177, 254, 0.5);
-                }
-            }
-    
-            div.cb {
-                border: 3px solid #B9B1FE;
-                margin: 0 15px 0 0;
-                width: 20px;
-                height: 20px;
-    
-                &.active {
-                    background: #B9B1FE;
-                }
-            }
-    
-            &.inactive {
-              opacity: 0.25;
-            }
-        }
+
     }
 
     div.create-button {
         display: flex;
         justify-content: flex-end;
         padding: 30px;
+    }
 
-        a.button {
-            background: hsla(202, 100%, 84%, 1);
-            background: linear-gradient(90deg, hsla(202, 100%, 84%, 1) 0%, hsla(246, 97%, 85%, 1) 100%);
-            background: -moz-linear-gradient(90deg, hsla(202, 100%, 84%, 1) 0%, hsla(246, 97%, 85%, 1) 100%);
-            background: -webkit-linear-gradient(90deg, hsla(202, 100%, 84%, 1) 0%, hsla(246, 97%, 85%, 1) 100%);
-            filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ADE1FF", endColorstr="#B9B1FE", GradientType=1 );
-    
+    div.loading {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1111;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.4);
+        color: white;
+        font-size: 24px;
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icon {
+            animation: rotate 1s infinite;
+        }
+
+        h3 {
+            padding: 30px;
+        }
+
+        &.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 240px;
-            height: 50px;
-            font-size: 24px;
-            font-weight: 400;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-
-            text-decoration: none;
         }
     }
 `;
@@ -119,6 +107,7 @@ export const MarketplaceCreateState = state => ({
     consensus: state.app.create.consensus,
     network: state.app.create.network,
     networkAppName: state.app.create.networkAppName,
+    networkId: state.app.create.networkId,
     token: state.app.create.token,
     pool: state.app.create.pool,
     epoch: state.app.create.epoch,
@@ -133,16 +122,19 @@ export interface MarketplaceCreateI {
     consensus: string;
     network: string;
     networkAppName: string;
+    networkId: string;
     token: string;
     pool: number;
     epoch: number;
     distribution: number;
     nodes: number;
 
-    setCreateInput(state: { key: string, value: string | number }): void;
+    setCreateInput(state: { key: string, value: string }): void;
 }
 
-export const MarketplaceCreateComponent: FC<MarketplaceCreateI> = ({ name, url, description, consensus, network, networkAppName, token, pool, epoch, distribution, nodes, setCreateInput }) => {
+export const MarketplaceCreateComponent: FC<MarketplaceCreateI> = ({ name, url, description, consensus, network, networkAppName, networkId, token, pool, epoch, distribution, nodes, setCreateInput }) => {
+    const [loading, setLoading] = useState(false);
+    
     return(
         <MarketplaceCreateContainer>
             <h2>Create A New Network</h2>
@@ -160,36 +152,23 @@ export const MarketplaceCreateComponent: FC<MarketplaceCreateI> = ({ name, url, 
             <div className="traits">
                 <p>Consensus Type</p>
 
-                <a className="option">
-                    <div className="cb active"></div>
-                    Approval Based  
-                </a>
-
-                <a className="option inactive">
-                    <div className="cb"></div>
-                    Quorum (Experimental)
-                </a>
+                <Checkbox label="Approval Based" active={true}/>
+                <Checkbox label="Quorum (Experimental)" active={false} disabled={true}/>
 
                 <p>Network Type</p>
 
-                <a className="option" onClick={e => setCreateInput({ key: 'network', value: 'full' })}>
-                    <div className={`cb ${network === 'full' ? 'active' : ''}`}></div>
-                    Full Node  
-                </a>
-                <a className="option" onClick={e => setCreateInput({ key: 'network', value: 'app' })}>
-                    <div className={`cb ${network === 'app' ? 'active' : ''}`}></div>
-                    App Node  
-                </a>
-                <a className="option inactive">
-                    <div className="cb"></div>
-                    Custom Node  
-                </a>
+                <Checkbox label="Full Node" active={network === 'full'} onClick={e => setCreateInput({ key: 'network', value: 'full' })}/>
+                <Checkbox label="App Node" active={network === 'app'} onClick={e => setCreateInput({ key: 'network', value: 'app' })}/>
+                <Checkbox label="Custom Node" active={network === 'custom'} disabled={true}/>
 
                 {
                     network === 'app' ?
                     <>
-                        <p>App-Name</p>
-                        <input type="text" placeholder="The App-Name tag" value={networkAppName} onChange={e => setCreateInput({ key: 'networkAppName', value: e.target.value })}/>
+                        <p>App Name</p>
+                        <input type="text" placeholder="App Name Tag" value={networkAppName} onChange={e => setCreateInput({ key: 'networkAppName', value: e.target.value })}/>
+                        
+                        <p>Contract ID</p>
+                        <input type="text" placeholder="Contract TX ID" value={networkId} onChange={e => setCreateInput({ key: 'networkId', value: e.target.value })}/>
                     </>
                     :
                     ''
@@ -197,22 +176,10 @@ export const MarketplaceCreateComponent: FC<MarketplaceCreateI> = ({ name, url, 
 
                 <p>Token Distribution</p>
 
-                <a className="option" onClick={e => setCreateInput({ key: 'token', value: 'amp' })}>
-                    <div className={`cb ${token === 'amp' ? 'active' : ''}`}></div>
-                    AMP  
-                </a>
-                <a className="option" onClick={e => setCreateInput({ key: 'token', value: 'ar' })}>
-                    <div className={`cb ${token === 'ar' ? 'active' : ''}`}></div>
-                    AR  
-                </a>
-                <a className="option inactive">
-                    <div className="cb"></div>
-                    PST  
-                </a>
-                <a className="option inactive">
-                    <div className="cb"></div>
-                    Custom  
-                </a>
+                <Checkbox label="AMP" active={true}/>
+                <Checkbox label="AR" active={false} disabled={true}/>
+                <Checkbox label="PST" active={false} disabled={true}/>
+                <Checkbox label="Custom" active={false} disabled={true}/>
             </div>
 
             <p>Initial Pool (in AMP)</p>
@@ -225,10 +192,54 @@ export const MarketplaceCreateComponent: FC<MarketplaceCreateI> = ({ name, url, 
             <input type="number" placeholder="#" min={0} value={distribution} onChange={e => setCreateInput({ key: 'distribution', value: e.target.value })}/>
 
             <p>Maximum Nodes</p>
-            <input type="number" placeholder="#" min={0} value={nodes} onChange={e => setCreateInput({ key: 'nodes', value: e.target.value })}/>
+            <input type="number" placeholder="#" min={1} value={nodes} onChange={e => setCreateInput({ key: 'nodes', value: e.target.value })}/>
 
             <div className="create-button">
-                <a className="button">Create</a>
+                <Button
+                    label="Create"
+                    width={240}
+                    height={50}
+                    onClick={async e => {
+                        setLoading(true);
+
+                        const tx = await arweave.createTransaction({ data: ` ` });
+
+                        tx.addTag(`App-Name`, `SmartWeaveAction`);
+                        tx.addTag(`App-Version`, `0.3.0`);
+                        tx.addTag(`Contract`, Contract);
+                        tx.addTag(
+                            `Input`,
+                            JSON.stringify({
+                                function: 'create',
+                                name,
+                                url,
+                                description,
+                                consensus,
+                                network,
+                                networkAppName,
+                                networkId,
+                                token,
+                                pool,
+                                epoch,
+                                distribution,
+                                nodes
+                            })
+                        );
+
+                        await arweave.transactions.sign(tx);
+                        await arweave.transactions.post(tx);
+
+                        setTimeout(() => {
+                            window.location.href = '/marketplace';
+                        }, 5000);
+                    }}
+                />
+            </div>
+
+            <div className={`loading ${loading ? 'active' : ''}`}>
+                <AiOutlineLoading3Quarters className="icon"/>
+                <h3>Creating New Network... Please wait...</h3>
+                <h4>Redirects to Marketplace on completion</h4>
             </div>
         </MarketplaceCreateContainer>
     )

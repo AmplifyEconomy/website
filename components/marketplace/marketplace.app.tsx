@@ -1,14 +1,20 @@
-import { FC } from 'react';
+import { FC, useState, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { readContract } from 'smartweave';
+import { get } from 'superagent';
 
-import { setPopup } from '../../redux/redux.app';
+import { arweave, Contract } from '../../arweave';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 import { AppNodes } from './app/app.nodes';
 import { AppJoin } from './app/app.join';
 import { AppManage } from './app/app.manage';
+import { Button } from '../shared/shared.button';
+
 
 export const MarketplaceAppContainer = styled.div`
+    position: relative;
     width: 100%;
 
     h3 {
@@ -56,7 +62,8 @@ export const MarketplaceAppContainer = styled.div`
             background: -webkit-linear-gradient(90deg, hsla(202, 100%, 84%, 1) 0%, hsla(246, 97%, 85%, 1) 100%);
             filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ADE1FF", endColorstr="#B9B1FE", GradientType=1 );
     
-            display: flex;
+            display: none;
+            &.active { display: flex; }
             align-items: center;
             justify-content: center;
             width: 180px;
@@ -73,8 +80,9 @@ export const MarketplaceAppContainer = styled.div`
         border-bottom: 2px dashed rgb(230, 230, 230);
     }
 
-    div.subtitle {
+    div.claim {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         width: 100%;
@@ -83,6 +91,7 @@ export const MarketplaceAppContainer = styled.div`
         h3 {
             font-size: 24px;
             font-weight: bold;
+            paddng: 0 0 30px 0;
         }
 
         border-bottom: 2px dashed rgb(230, 230, 230);
@@ -102,7 +111,6 @@ export const MarketplaceAppContainer = styled.div`
         align-items: center;
 
         font-size: 14px;
-        font-weight: bold;
         padding: 0 0 10px 0;
 
         a.mini-button {
@@ -157,40 +165,161 @@ export const MarketplaceAppContainer = styled.div`
             }
         }
     }
+
+    div.loading {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1111;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        color: black;
+        font-size: 24px;
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icon {
+            animation: rotate 1s infinite;
+        }
+
+        h3 {
+            padding: 30px;
+        }
+
+        &.active {
+            display: flex;
+        }
+    }
 `;
 
 export const MarketplaceAppState = state => ({
-    popup: state.app.popup,
+    address: state.marketplace.address,
+    name: state.marketplace.name,
 });
 
 export interface MarketplaceAppI {
-    popup: boolean;
-    setPopup(state: boolean): void;
+    address: string;
+    name: string;
 }
 
-export const MarketplaceAppComponent: FC<MarketplaceAppI> = ({ popup, setPopup }) => {
+export const MarketplaceAppComponent: FC<MarketplaceAppI> = ({ address, name }) => {
+    const [loading, setLoading] = useState(false);
+    const [claim, setClaim] = useState(false);
+    const [networks, setNetworks] = useState({} as any);
+    const [popup, setPopup] = useState(false);
+    const [height, setHeight] = useState(1);
+
+    async function loadNetworks() {
+        setLoading(true);
+
+        if (arweave) {      
+            const payload = await get(`https://arweave.net/`);
+            setHeight(JSON.parse(payload.text).height);
+
+            const contract = await readContract(arweave, Contract);
+            setNetworks(contract.networks);
+            setLoading(false);
+        } else {
+            setTimeout(() => {
+                loadNetworks();
+            }, 1000);
+        }
+    }
+
+    function retrieveKey(key: string) {
+        if (networks[name]) {
+            return networks[name][key];
+        } else {
+            return ``
+        }
+    }
+
+    function calculateClaim() {
+        if (!networks[name]) {
+            return 0;
+        }
+
+        const epoch = retrieveKey('epoch');
+        const distribution = retrieveKey('distribution');
+        const node = retrieveKey('nodes')[address];
+        const claims = node.claims;
+        const nodeHeight = node.startHeight;
+        const currentHeight = height;
+
+        const delta = currentHeight - nodeHeight;
+        const epochs = Math.floor(delta / parseFloat(epoch));
+        const pendingClaims = epochs - parseInt(claims);
+        const netDistribution = pendingClaims * parseFloat(distribution);
+
+        return netDistribution.toFixed(4);
+    }
+
+    useLayoutEffect(() => {
+        loadNetworks();
+    }, []);
+
     return(
         <MarketplaceAppContainer>
             <div className="title">
                 <img src="/image/amplify.png"/>
 
                 <h3>
-                    Amplify Main Network
-                    <a className="network-link">(https://amp-gw.online)</a>
+                    {name}
+                    <a className="network-link" href={retrieveKey(`url`)} target={retrieveKey(`url`)}>({retrieveKey(`url`)})</a>
                 </h3>
 
-                <a className="edit-button" onClick={e => setPopup(!popup)}>
+                <a className={`edit-button ${retrieveKey(`owner`) === address ? 'active' : ''}`} onClick={e => setPopup(!popup)}>
                     Manage Network
                 </a>
             </div>
 
-            <div className="subtitle">
-                <h3>100 AMP will be Distributed in 100 Blocks</h3>
-            </div>
+            {
+                retrieveKey('nodes')[address] ?
+                <div className="claim">
+                    <h3>A {calculateClaim()} AMP Distribution is available for your node</h3>
+                    <Button
+                        label="Claim"
+                        width={240}
+                        height={50}
+                        onClick={async e => {
+                            setLoading(true);
+                            setClaim(true);
+
+                            const tx = await arweave.createTransaction({ data: ` ` });
+    
+                            tx.addTag(`App-Name`, `SmartWeaveAction`);
+                            tx.addTag(`App-Version`, `0.3.0`);
+                            tx.addTag(`Contract`, Contract);
+                            tx.addTag(
+                                `Claim`,
+                                JSON.stringify({
+                                    function: 'claim',
+                                    name,
+                                })
+                            );
+        
+                            await arweave.transactions.sign(tx);
+                            await arweave.transactions.post(tx);
+    
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 5000);
+                        }}
+                    />
+                </div>
+                : ''
+            }
+            
             <div className="text">
-                <p>
-                    This is the Amplify Main Network. Need to figure out a good description.
-                </p>
+                <p>{retrieveKey('description')}</p>
             </div>
             <div className="text">
                 <div className="traits">
@@ -200,7 +329,7 @@ export const MarketplaceAppComponent: FC<MarketplaceAppI> = ({ popup, setPopup }
                     </div>
                     <div className="trait">
                         <p>Network Type</p>
-                        <h4>Full Node</h4>
+                        <h4>{retrieveKey('network').toUpperCase()} Node</h4>
                     </div>
                     <div className="trait">
                         <p>Token Distribution</p>
@@ -208,25 +337,31 @@ export const MarketplaceAppComponent: FC<MarketplaceAppI> = ({ popup, setPopup }
                     </div>
                     <div className="trait">
                         <p>Epoch</p>
-                        <h4>100 Blocks</h4>
+                        <h4>{retrieveKey('epoch')} Blocks</h4>
                     </div>
                     <div className="trait">
                         <p>Epoch Distribution Value</p>
-                        <h4>100 AMP</h4>
+                        <h4>{retrieveKey('distribution')} AMP</h4>
                     </div>
                     <div className="trait">
                         <p>Node Pool</p>
-                        <h4>9/10</h4>
+                        <h4>{Object.keys(retrieveKey('nodes')).length}/{retrieveKey('maxNodes')}</h4>
                     </div>
                 </div>
 
-                <AppNodes/>
+                <AppNodes nodes={retrieveKey('nodes') || {}}/>
                 <AppJoin/>
-                <AppManage/>
+                <AppManage name={name} popup={popup} setPopup={setPopup} networks={networks}/>
+            </div>
 
+            <div className={`loading ${loading ? 'active' : ''}`}>
+                <AiOutlineLoading3Quarters className="icon"/>
+                <h3>
+                    {claim ? `Processing Claim Please Wait...` : `Loading Network Please Wait...`}
+                </h3>
             </div>
         </MarketplaceAppContainer>
     )
 }
 
-export const MarketplaceApp = connect(MarketplaceAppState, { setPopup })(MarketplaceAppComponent);
+export const MarketplaceApp = connect(MarketplaceAppState)(MarketplaceAppComponent);

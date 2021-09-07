@@ -24,7 +24,7 @@ export const TestnetFaucetContainer = styled.div`
 
     input {
         font-family: monospace;
-        width: calc(100% - 45px);
+        width: 100%;
         height: 50px;
         border-radius: 8px;
         border: 2px solid hsla(200, 100%, 84%, 1);
@@ -38,7 +38,7 @@ export const TestnetFaucetContainer = styled.div`
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        padding: 15px;
+        padding: 15px 0;
 
         div.status {
             display: flex;
